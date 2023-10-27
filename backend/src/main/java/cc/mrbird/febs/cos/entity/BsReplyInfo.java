@@ -10,14 +10,14 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 消息发送记录
+ * 项目评论信息管理
  *
  * @author FanK
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class BsSendMessInfo implements Serializable {
+public class BsReplyInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,29 +25,39 @@ public class BsSendMessInfo implements Serializable {
     private Integer id;
 
     /**
+     * 项目编号
+     */
+    private String code;
+
+    /**
+     * 用户名称
+     */
+    private String userName;
+
+    /**
      * 邮箱地址
      */
     private String email;
 
     /**
-     * 发送内容
+     * 消息内容
      */
     private String content;
 
     /**
-     * 发送时间
+     * 创建时间
      */
     private String createDate;
 
     /**
-     * 发送状态（0.成功 1.异常）
+     * 修改时间
      */
-    private String status;
+    private String updateDate;
 
     /**
-     * 重发时间
+     * 删除标识
      */
-    private String retryDate;
+    private String delFlag;
 
 
 }

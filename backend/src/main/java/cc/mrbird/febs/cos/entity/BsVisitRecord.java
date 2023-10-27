@@ -2,6 +2,9 @@ package cc.mrbird.febs.cos.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,10 +21,13 @@ public class BsVisitRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 访问时间
      */
-    private LocalDateTime visitDate;
+    private String visitDate;
 
     /**
      * 访问地点

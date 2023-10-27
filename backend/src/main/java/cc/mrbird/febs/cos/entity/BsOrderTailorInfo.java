@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,6 +22,9 @@ import lombok.experimental.Accessors;
 public class BsOrderTailorInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 订单编号
@@ -68,7 +74,7 @@ public class BsOrderTailorInfo implements Serializable {
     /**
      * 交付期限
      */
-    private LocalDate deliverDate;
+    private String deliverDate;
 
     /**
      * 状态（-1.作废 0.未支付 1.预付款已支付 2.全款已支付）
@@ -88,12 +94,12 @@ public class BsOrderTailorInfo implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateDate;
+    private String updateDate;
 
     /**
      * 删除标识
