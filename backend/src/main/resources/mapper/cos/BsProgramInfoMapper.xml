@@ -2,4 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsProgramInfoMapper">
 
+    <!-- 分页获取项目信息 -->
+    <select id="selectProgramPage" resultType="java.util.LinkedHashMap">
+        select
+        bpi.id,
+        bpi.code,
+        bpi.tag_code,
+        bpi.content,
+        bpi.images,
+        bpi.title,
+        bpi.synopsis,
+        bpi.type_code,
+        bpi.video_url,
+        bpi.`condition`,
+        bpi.attachment,
+        bpi.unit_price,
+        bpi.technology,
+        bpi.author,
+        bpi.create_date,
+        bpi.update_by,
+        bpi.update_date,
+        bpi.del_flag,
+        bpi.status,
+        group_concat(bti.type_name order by bti.type_name asc separator ',') as types,
+        group_concat(bti2.tag_name order by bti2.tag_name asc separator ',') as tags
+        from
+        bs_program_info bpi
+        left join bs_type_info bti on
+        (bti.code = bpi.type_code)
+        left join bs_tag_info bti2 on
+        (bti2.code = bpi.tag_code)
+        where
+        1 = 1
+        <if test="bsProgramInfo.code != null and bsProgramInfo.code != ''">
+            AND bpi.code LIKE CONCAT('%',#{bsProgramInfo.code},'%')
+        </if>
+        <if test="bsProgramInfo.title != null and bsProgramInfo.title != ''">
+            AND bpi.title LIKE CONCAT('%',#{bsProgramInfo.title},'%')
+        </if>
+        <if test="bsProgramInfo.author != null and bsProgramInfo.author != ''">
+            AND bpi.author LIKE CONCAT('%',#{bsProgramInfo.author},'%')
+        </if>
+        <if test="bsProgramInfo.status != null and bsProgramInfo.status != ''">
+            AND bpi.status = #{bsProgramInfo.status}
+        </if>
+        order by
+        bpi.create_date desc
+    </select>
 </mapper>

@@ -85,5 +85,8 @@ public class BsOrderInfo implements Serializable {
      */
     private String delFlag;
 
-
+    /**
+     * 项目名称
+     */
+    private String title;
 }

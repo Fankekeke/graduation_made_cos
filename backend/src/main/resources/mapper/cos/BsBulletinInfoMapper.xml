@@ -2,4 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsBulletinInfoMapper">
 
+    <!-- 分页获取系统公告信息 -->
+    <select id="selectBulletinPage" resultType="java.util.LinkedHashMap">
+        select
+        id,
+        title,
+        synopsis,
+        content,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        del_flag,
+        status,
+        images,
+        pin_top,
+        sort_no,
+        access_num,
+        bulletin_type
+        from
+        bs_bulletin_info
+        where
+        1 = 1
+        <if test="bsBulletinInfo.title != null and bsBulletinInfo.title != ''">
+            AND title LIKE CONCAT('%',#{bsBulletinInfo.title},'%')
+        </if>
+        <if test="bsBulletinInfo.status != null and bsBulletinInfo.status != ''">
+            AND status = #{bsBulletinInfo.status}
+        </if>
+        <if test="bsBulletinInfo.bulletinType != null and bsBulletinInfo.bulletinType != ''">
+            AND bulletin_type = #{bsBulletinInfo.bulletinType}
+        </if>
+        order by pin_top, sort_no,
+        create_date desc
+    </select>
 </mapper>

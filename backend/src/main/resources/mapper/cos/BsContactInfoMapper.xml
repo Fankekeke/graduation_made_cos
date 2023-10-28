@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsContactInfoMapper">
 
+    <!-- 分页获取系统联系信息 -->
+    <select id="selectContactPage" resultType="java.util.LinkedHashMap">
+        select
+        id,
+        code,
+        email,
+        content,
+        user_name,
+        create_date,
+        update_by,
+        update_date,
+        del_flag,
+        status
+        from
+        bs_contact_info
+        where
+        1 = 1
+        <if test="bsContactInfo.code != null and bsContactInfo.code != ''">
+            AND code LIKE CONCAT('%',#{bsContactInfo.code},'%')
+        </if>
+        <if test="bsContactInfo.email != null and bsContactInfo.email != ''">
+            AND email LIKE CONCAT('%',#{bsContactInfo.email},'%')
+        </if>
+        <if test="bsContactInfo.userName != null and bsContactInfo.userName != ''">
+            AND user_name LIKE CONCAT('%',#{bsContactInfo.userName},'%')
+        </if>
+        <if test="bsContactInfo.status != null and bsContactInfo.status != ''">
+            AND status = #{bsContactInfo.status}
+        </if>
+        order by
+        create_date desc
+    </select>
 </mapper>

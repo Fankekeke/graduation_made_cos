@@ -2,4 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsOrderInfoMapper">
 
+    <!-- 分页获取设计订单信息 -->
+    <select id="selectOrderPage" resultType="java.util.LinkedHashMap">
+        select
+        id,
+        code,
+        email,
+        user_name,
+        contact,
+        program_code,
+        total_price,
+        content,
+        create_date,
+        status,
+        pay_date,
+        update_date,
+        del_flag,
+        bpi.images,
+        bpi.title,
+        group_concat(bti.type_name order by bti.type_name asc separator ',') as types,
+        group_concat(bti2.tag_name order by bti2.tag_name asc separator ',') as tags
+        from
+        bs_order_info boi
+        left join bs_program_info bpi on
+        (bpi.code = boi.program_code)
+        left join bs_type_info bti on
+        (bti.code = bpi.type_code)
+        left join bs_tag_info bti2 on
+        (bti2.code = bpi.tag_code)
+        where
+        1 = 1
+        <if test="bsOrderInfo.code != null and bsOrderInfo.code != ''">
+            AND boi.code LIKE CONCAT('%',#{bsOrderInfo.code},'%')
+        </if>
+        <if test="bsOrderInfo.email != null and bsOrderInfo.email != ''">
+            AND boi.email LIKE CONCAT('%',#{bsOrderInfo.email},'%')
+        </if>
+        <if test="bsOrderInfo.userName != null and bsOrderInfo.userName != ''">
+            AND boi.user_name LIKE CONCAT('%',#{bsOrderInfo.userName},'%')
+        </if>
+        <if test="bsOrderInfo.status != null and bsOrderInfo.status != ''">
+            AND boi.status = #{bsOrderInfo.status}
+        </if>
+        <if test="bsOrderInfo.title != null and bsOrderInfo.title != ''">
+            AND bpi.title LIKE CONCAT('%',#{bsOrderInfo.title},'%')
+        </if>
+        order by
+        boi.create_date desc
+
+    </select>
 </mapper>

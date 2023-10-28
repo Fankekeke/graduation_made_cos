@@ -2,4 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsAttachmentInfoMapper">
 
+    <!-- 分页获取附件信息 -->
+    <select id="selectAttachmentPage" resultType="java.util.LinkedHashMap">
+        select
+        bat.id,
+        bat.code,
+        bat.title,
+        bat.tag_code,
+        bat.file_id,
+        bat.unit_price,
+        bat.author,
+        bat.create_date,
+        bat.update_by,
+        bat.update_date,
+        bat.del_flag,
+        bat.status,
+        bat.download_num,
+        group_concat(bti.tag_name order by bti.tag_name asc separator ',') as tags
+        from
+        bs_attachment_info bat
+        left join bs_tag_info bti on
+        (bti.code = bat.tag_code)
+        where
+        1 = 1
+        <if test="bsAttachmentInfo.code != null and bsAttachmentInfo.code != ''">
+            AND bat.code LIKE CONCAT('%',#{bsAttachmentInfo.code},'%')
+        </if>
+        <if test="bsAttachmentInfo.title != null and bsAttachmentInfo.title != ''">
+            AND bat.title LIKE CONCAT('%',#{bsAttachmentInfo.title},'%')
+        </if>
+        <if test="bsAttachmentInfo.author != null and bsAttachmentInfo.author != ''">
+            AND bat.author LIKE CONCAT('%',#{bsAttachmentInfo.author},'%')
+        </if>
+        <if test="bsAttachmentInfo.status != null and bsAttachmentInfo.status != ''">
+            AND bat.status = #{bsAttachmentInfo.status}
+        </if>
+        <if test="bsAttachmentInfo.tagCode != null and bsAttachmentInfo.tagCode != ''">
+            AND group_concat(bti.tag_name order by bti.tag_name asc separator ',') LIKE CONCAT('%',#{bsAttachmentInfo.tagCode},'%')
+        </if>
+        order by
+        bat.create_date desc
+    </select>
 </mapper>

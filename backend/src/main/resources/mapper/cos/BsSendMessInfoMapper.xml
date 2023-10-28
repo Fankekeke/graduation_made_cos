@@ -2,4 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cc.mrbird.febs.cos.dao.BsSendMessInfoMapper">
 
+    <!-- 分页获取消息发送记录信息 -->
+    <select id="selectMessPage" resultType="java.util.LinkedHashMap">
+        select
+        id,
+        email,
+        content,
+        create_date,
+        status,
+        retry_date
+        from
+        bs_send_mess_info
+        where
+        1 = 1
+        <if test="bsSendMessInfo.email != null and bsSendMessInfo.email != ''">
+            AND email LIKE CONCAT('%',#{bsSendMessInfo.email},'%')
+        </if>
+        <if test="bsSendMessInfo.status != null and bsSendMessInfo.status != ''">
+            AND status = #{bsSendMessInfo.status}
+        </if>
+        order by
+        create_date desc
+    </select>
 </mapper>
