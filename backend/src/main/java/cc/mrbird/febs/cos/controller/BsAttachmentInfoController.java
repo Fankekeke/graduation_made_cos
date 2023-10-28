@@ -32,7 +32,7 @@ public class BsAttachmentInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsAttachmentInfo> page, BsAttachmentInfo bsAttachmentInfo) {
-        return R.ok();
+        return R.ok(bsAttachmentInfoService.selectAttachmentPage(page, bsAttachmentInfo));
     }
 
     /**

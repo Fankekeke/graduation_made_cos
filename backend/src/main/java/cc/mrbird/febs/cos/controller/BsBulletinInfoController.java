@@ -32,7 +32,7 @@ public class BsBulletinInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsBulletinInfo> page, BsBulletinInfo bsBulletinInfo) {
-        return R.ok();
+        return R.ok(bsBulletinInfoService.selectBulletinPage(page, bsBulletinInfo));
     }
 
     /**

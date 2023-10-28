@@ -32,7 +32,7 @@ public class BsTypeInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsTypeInfo> page, BsTypeInfo bsTypeInfo) {
-        return R.ok();
+        return R.ok(bsTypeInfoService.selectTypePage(page, bsTypeInfo));
     }
 
     /**

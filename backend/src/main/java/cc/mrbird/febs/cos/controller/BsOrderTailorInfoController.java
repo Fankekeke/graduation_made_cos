@@ -26,13 +26,13 @@ public class BsOrderTailorInfoController {
     /**
      * 分页获取定制订单信息
      *
-     * @param page         分页对象
+     * @param page              分页对象
      * @param bsOrderTailorInfo 定制订单信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<BsOrderTailorInfo> page, BsOrderTailorInfo bsOrderTailorInfo) {
-        return R.ok();
+        return R.ok(bsOrderTailorInfoService.selectOrderPage(page, bsOrderTailorInfo));
     }
 
     /**
@@ -64,7 +64,7 @@ public class BsOrderTailorInfoController {
      */
     @PostMapping
     public R save(BsOrderTailorInfo bsOrderTailorInfo) {
-        bsOrderTailorInfo.setCode("ODT-" +System.currentTimeMillis());
+        bsOrderTailorInfo.setCode("ODT-" + System.currentTimeMillis());
         bsOrderTailorInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(bsOrderTailorInfoService.save(bsOrderTailorInfo));
     }
@@ -90,5 +90,5 @@ public class BsOrderTailorInfoController {
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(bsOrderTailorInfoService.removeByIds(ids));
     }
-    
+
 }

@@ -32,7 +32,7 @@ public class BsContactInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsContactInfo> page, BsContactInfo bsContactInfo) {
-        return R.ok();
+        return R.ok(bsContactInfoService.selectContactPage(page, bsContactInfo));
     }
 
     /**

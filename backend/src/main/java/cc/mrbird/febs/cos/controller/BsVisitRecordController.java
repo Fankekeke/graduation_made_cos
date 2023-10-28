@@ -32,7 +32,7 @@ public class BsVisitRecordController {
      */
     @GetMapping("/page")
     public R page(Page<BsVisitRecord> page, BsVisitRecord bsVisitRecord) {
-        return R.ok();
+        return R.ok(bsVisitRecordService.selectRecordPage(page, bsVisitRecord));
     }
 
     /**

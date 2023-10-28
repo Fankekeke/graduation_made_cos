@@ -26,13 +26,13 @@ public class BsProgramInfoController {
     /**
      * 分页获取项目信息
      *
-     * @param page         分页对象
+     * @param page          分页对象
      * @param bsProgramInfo 项目信息
      * @return 结果
      */
     @GetMapping("/page")
     public R page(Page<BsProgramInfo> page, BsProgramInfo bsProgramInfo) {
-        return R.ok();
+        return R.ok(bsProgramInfoService.selectProgramPage(page, bsProgramInfo));
     }
 
     /**
@@ -64,7 +64,7 @@ public class BsProgramInfoController {
      */
     @PostMapping
     public R save(BsProgramInfo bsProgramInfo) {
-        bsProgramInfo.setCode("PR-" +System.currentTimeMillis());
+        bsProgramInfo.setCode("PR-" + System.currentTimeMillis());
         bsProgramInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(bsProgramInfoService.save(bsProgramInfo));
     }
@@ -90,5 +90,5 @@ public class BsProgramInfoController {
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(bsProgramInfoService.removeByIds(ids));
     }
-    
+
 }

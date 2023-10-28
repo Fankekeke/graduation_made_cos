@@ -26,7 +26,7 @@ public class BsReplyInfoController {
     /**
      * 分页获取项目评论信息
      *
-     * @param page         分页对象
+     * @param page        分页对象
      * @param bsReplyInfo 项目评论信息
      * @return 结果
      */
@@ -64,7 +64,7 @@ public class BsReplyInfoController {
      */
     @PostMapping
     public R save(BsReplyInfo bsReplyInfo) {
-        bsReplyInfo.setCode("PR-" +System.currentTimeMillis());
+        bsReplyInfo.setCode("PR-" + System.currentTimeMillis());
         bsReplyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(bsReplyInfoService.save(bsReplyInfo));
     }
@@ -90,5 +90,5 @@ public class BsReplyInfoController {
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {
         return R.ok(bsReplyInfoService.removeByIds(ids));
     }
-    
+
 }

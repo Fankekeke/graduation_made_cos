@@ -32,7 +32,7 @@ public class BsTagInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsTagInfo> page, BsTagInfo bsTagInfo) {
-        return R.ok();
+        return R.ok(bsTagInfoService.selectTagPage(page, bsTagInfo));
     }
 
     /**

@@ -32,7 +32,7 @@ public class BsSendMessInfoController {
      */
     @GetMapping("/page")
     public R page(Page<BsSendMessInfo> page, BsSendMessInfo bsSendMessInfo) {
-        return R.ok();
+        return R.ok(bsSendMessInfoService.selectMessPage(page, bsSendMessInfo));
     }
 
     /**
