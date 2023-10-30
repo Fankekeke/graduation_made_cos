@@ -1,5 +1,6 @@
 package cc.mrbird.febs.common.utils;
 
+import cn.hutool.core.img.Img;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.entity.ContentType;
 import org.springframework.mock.web.MockMultipartFile;
