@@ -1,6 +1,6 @@
 <template>
-  <a-card :bordered="false" hoverable style="margin-top: 10px;background-color: #f9f9f9">
-    <div style="text-align: left;font-size: 14px;margin-bottom: 30px"><b>二手交易平台</b></div>
+  <a-card :bordered="false" hoverable style="margin-top: 130px;background-color: #f9f9f9">
+    <div style="text-align: left;font-size: 14px;margin-bottom: 30px"><b>Brave</b></div>
     <div class="login">
       <a-form @submit.prevent="doLogin" :autoFormCreate="(form) => this.form = form">
         <div>

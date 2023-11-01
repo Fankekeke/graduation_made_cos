@@ -3,6 +3,7 @@
     <div class="content" style="padding-top: 200px">
       <div class="top">
         <div class="header">
+          <img alt="logo" src="static/img/logo1.png" height="175"/>
           <span style="font-size: 30px;"></span>
         </div>
       </div>
@@ -47,7 +48,8 @@ export default {
     flex-direction: column;
     height: 100vh;
     overflow: auto;
-    background: #f0f2f5 url(../../../static/img/river-6968614.png) no-repeat center ;
+    //background: #f0f2f5 url(../../../static/img/river-6968614.png) no-repeat center ;
+    background: #ececec no-repeat center 110px;
     background-size: cover;
     .content {
       padding: 32px 0;
