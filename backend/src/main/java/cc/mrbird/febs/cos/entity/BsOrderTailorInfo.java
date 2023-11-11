@@ -57,6 +57,11 @@ public class BsOrderTailorInfo implements Serializable {
     private String contact;
 
     /**
+     * 用户头像
+     */
+    private String images;
+
+    /**
      * 价格
      */
     private BigDecimal totalPrice;

@@ -46,6 +46,11 @@ public class BsOrderInfo implements Serializable {
     private String contact;
 
     /**
+     * 用户头像
+     */
+    private String images;
+
+    /**
      * 项目编号
      */
     private String programCode;

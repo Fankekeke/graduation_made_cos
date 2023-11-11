@@ -21,4 +21,12 @@ public interface IBsVisitRecordService extends IService<BsVisitRecord> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectRecordPage(Page<BsVisitRecord> page, BsVisitRecord bsVisitRecord);
+
+    /**
+     * 新增系统访问记录信息
+     *
+     * @param visitRecord 系统访问记录信息
+     * @return 结果
+     */
+    boolean addVisitRecord(BsVisitRecord visitRecord);
 }
