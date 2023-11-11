@@ -26,7 +26,7 @@ public class BsOrderInfoController {
     /**
      * 分页获取设计订单信息
      *
-     * @param page         分页对象
+     * @param page        分页对象
      * @param bsOrderInfo 设计订单信息
      * @return 结果
      */
@@ -64,7 +64,7 @@ public class BsOrderInfoController {
      */
     @PostMapping
     public R save(BsOrderInfo bsOrderInfo) {
-        bsOrderInfo.setCode("OD-" +System.currentTimeMillis());
+        bsOrderInfo.setCode("OD-" + System.currentTimeMillis());
         bsOrderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(bsOrderInfoService.save(bsOrderInfo));
     }
@@ -91,4 +91,13 @@ public class BsOrderInfoController {
         return R.ok(bsOrderInfoService.removeByIds(ids));
     }
 
+    /**
+     * 首页数据统计
+     *
+     * @return 结果
+     */
+    @GetMapping("/home/data")
+    public R homeData() {
+        return R.ok();
+    }
 }

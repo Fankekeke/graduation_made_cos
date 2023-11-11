@@ -16,9 +16,16 @@ public interface IBsOrderInfoService extends IService<BsOrderInfo> {
     /**
      * 分页获取设计订单信息
      *
-     * @param page         分页对象
+     * @param page        分页对象
      * @param bsOrderInfo 设计订单信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectOrderPage(Page<BsOrderInfo> page, BsOrderInfo bsOrderInfo);
+
+    /**
+     * 查询主页展示信息
+     *
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectHomeData();
 }
