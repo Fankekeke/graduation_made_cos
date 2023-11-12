@@ -7,47 +7,60 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="公告标题"
+                label="城市名称"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.title"/>
+                <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="状态"
+                label="城市类型"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.status">
-                  <a-select-option value='0'>待发布</a-select-option>
-                  <a-select-option value='1'>已发布</a-select-option>
-                  <a-select-option value='2'>下架</a-select-option>
+                <a-select
+                  :allowClear="true"
+                  v-model="queryParams.suffix"
+                  style="width: 100%">
+                  <a-select-option value="市">市</a-select-option>
+                  <a-select-option value="省">省</a-select-option>
+                  <a-select-option value="自治区">自治区</a-select-option>
+                  <a-select-option value="特别行政区">特别行政区</a-select-option>
+                  <a-select-option value="区">区</a-select-option>
+                  <a-select-option value="县">县</a-select-option>
+                  <a-select-option value="自治州">自治州</a-select-option>
+                  <a-select-option value="地区">地区</a-select-option>
+                  <a-select-option value="自治县">自治县</a-select-option>
+                  <a-select-option value="盟">盟</a-select-option>
+                  <a-select-option value="旗">旗</a-select-option>
+                  <a-select-option value="自治旗">自治旗</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="公告类型"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.bulletinType">
-                  <a-select-option value='0'>普通</a-select-option>
-                  <a-select-option value='1'>答辩技巧</a-select-option>
-                  <a-select-option value='2'>购买须知</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
+            <template v-if="advanced">
+              <a-col :md="6" :sm="24">
+                <a-form-item
+                  label="简 写"
+                  :labelCol="{span: 4}"
+                  :wrapperCol="{span: 18, offset: 2}">
+                  <a-input v-model="queryParams.initials"/>
+                </a-form-item>
+              </a-col>
+            </template>
           </div>
           <span style="float: right; margin-top: 3px;">
             <a-button type="primary" @click="search">查询</a-button>
             <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+             <a @click="toggleAdvanced" style="margin-left: 8px">
+              {{ advanced ? '收起' : '展开' }}
+              <a-icon :type="advanced ? 'up' : 'down'"/>
+            </a>
           </span>
         </a-row>
       </a-form>
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -65,41 +78,21 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './BulletinAdd.vue'
-import BulletinEdit from './BulletinEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'City',
+  components: {RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
-        visiable: false
-      },
-      bulletinEdit: {
-        visiable: false
-      },
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -124,88 +117,32 @@ export default {
     }),
     columns () {
       return [{
-        title: '公告类型',
-        dataIndex: 'bulletinType',
+        title: '城市名称',
+        dataIndex: 'name'
+      }, {
+        title: '所属',
+        dataIndex: 'parent'
+      }, {
+        title: '首字母',
+        dataIndex: 'initial',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag>普通</a-tag>
-            case 1:
-              return <a-tag>答辩技巧</a-tag>
-            case 2:
-              return <a-tag>购买须知</a-tag>
-            default:
-              return '- -'
-          }
+          return text
         }
       }, {
-        title: '公告标题',
-        dataIndex: 'title'
+        title: '简写',
+        dataIndex: 'initials'
       }, {
-        title: '简介介绍',
-        dataIndex: 'synopsis'
+        title: '拼音',
+        dataIndex: 'pinyin'
       }, {
-        title: '访问量',
-        dataIndex: 'accessNum',
+        title: '城市类型',
+        dataIndex: 'suffix',
         customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '次'
-          } else {
-            return '- -'
-          }
+          return <a-tag color="pink">{text}</a-tag>
         }
       }, {
-        title: '状态',
-        dataIndex: 'status',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='pink'>待发布</a-tag>
-            case 1:
-              return <a-tag color='green'>已发布</a-tag>
-            case 2:
-              return <a-tag color='red'>下架</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '是否置顶',
-        dataIndex: 'pinTop',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='red'>否</a-tag>
-            case 1:
-              return <a-tag color='green'>是</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '发布时间',
-        dataIndex: 'createDate',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '创建人',
-        dataIndex: 'createBy',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
+        title: '城市代码',
+        dataIndex: 'code'
       }]
     }
   },
@@ -218,29 +155,6 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    },
-    add () {
-      this.bulletinAdd.visiable = true
-    },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
-    },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
-      this.search()
-    },
-    edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
-    },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
-    },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
-      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -257,7 +171,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bs-bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/sys-city/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -327,7 +241,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bs-bulletin-info/page', {
+      this.$get('/cos/sys-city/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

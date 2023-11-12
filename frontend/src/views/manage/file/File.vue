@@ -7,10 +7,26 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="公告标题"
+                label="附件编号"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.code"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="附件标题"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-input v-model="queryParams.title"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="作者"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.author"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
@@ -27,10 +43,10 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="公告类型"
+                label="附件类型"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.bulletinType">
+                <a-select v-model="queryParams.fileType">
                   <a-select-option value='0'>普通</a-select-option>
                   <a-select-option value='1'>答辩技巧</a-select-option>
                   <a-select-option value='2'>购买须知</a-select-option>
@@ -65,39 +81,39 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
+    <file-add
+      v-if="fileAdd.visiable"
+      @close="handlefileAddClose"
+      @success="handlefileAddSuccess"
+      :fileAddVisiable="fileAdd.visiable">
+    </file-add>
+    <file-edit
+      ref="fileEdit"
+      @close="handlefileEditClose"
+      @success="handlefileEditSuccess"
+      :fileEditVisiable="fileEdit.visiable">
+    </file-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './BulletinAdd.vue'
-import BulletinEdit from './BulletinEdit.vue'
+import fileAdd from './FileAdd.vue'
+import fileEdit from './FileEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'file',
+  components: {fileAdd, fileEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      fileAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      fileEdit: {
         visiable: false
       },
       queryParams: {},
@@ -124,29 +140,24 @@ export default {
     }),
     columns () {
       return [{
-        title: '公告类型',
-        dataIndex: 'bulletinType',
+        title: '附件编号',
+        dataIndex: 'code'
+      }, {
+        title: '附件标题',
+        dataIndex: 'title'
+      }, {
+        title: '价格',
+        dataIndex: 'unitPrice',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag>普通</a-tag>
-            case 1:
-              return <a-tag>答辩技巧</a-tag>
-            case 2:
-              return <a-tag>购买须知</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return text + '元'
+          } else {
+            return '- -'
           }
         }
       }, {
-        title: '公告标题',
-        dataIndex: 'title'
-      }, {
-        title: '简介介绍',
-        dataIndex: 'synopsis'
-      }, {
-        title: '访问量',
-        dataIndex: 'accessNum',
+        title: '下载次数',
+        dataIndex: 'downloadNum',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '次'
@@ -170,19 +181,6 @@ export default {
           }
         }
       }, {
-        title: '是否置顶',
-        dataIndex: 'pinTop',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='red'>否</a-tag>
-            case 1:
-              return <a-tag color='green'>是</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
         title: '发布时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
@@ -193,8 +191,8 @@ export default {
           }
         }
       }, {
-        title: '创建人',
-        dataIndex: 'createBy',
+        title: '作者',
+        dataIndex: 'author',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -220,26 +218,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.fileAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handlefileAddClose () {
+      this.fileAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handlefileAddSuccess () {
+      this.fileAdd.visiable = false
+      this.$message.success('新增附件成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.fileEdit.setFormValues(record)
+      this.fileEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handlefileEditClose () {
+      this.fileEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handlefileEditSuccess () {
+      this.fileEdit.visiable = false
+      this.$message.success('修改附件成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -257,7 +255,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bs-bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/bs-attachment-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -327,7 +325,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bs-bulletin-info/page', {
+      this.$get('/cos/bs-attachment-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

@@ -7,34 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="公告标题"
+                label="学校名称"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model="queryParams.title"/>
+                <a-input v-model="queryParams.name"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="状态"
+                label="所在城市"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.status">
-                  <a-select-option value='0'>待发布</a-select-option>
-                  <a-select-option value='1'>已发布</a-select-option>
-                  <a-select-option value='2'>下架</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="公告类型"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.bulletinType">
-                  <a-select-option value='0'>普通</a-select-option>
-                  <a-select-option value='1'>答辩技巧</a-select-option>
-                  <a-select-option value='2'>购买须知</a-select-option>
-                </a-select>
+                <a-input v-model="queryParams.city"/>
               </a-form-item>
             </a-col>
           </div>
@@ -65,39 +49,40 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
+    <!-- 新增学校 -->
+    <school-add
+      @close="handleSchoolAddClose"
+      @success="handleSchoolAddSuccess"
+      :schoolAddVisiable="schoolAdd.visiable">
+    </school-add>
+    <!-- 修改学校 -->
+    <school-edit
+      ref="schoolEdit"
+      @close="handleSchoolEditClose"
+      @success="handleSchoolEditSuccess"
+      :schoolEditVisiable="schoolEdit.visiable">
+    </school-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './BulletinAdd.vue'
-import BulletinEdit from './BulletinEdit.vue'
+import SchoolAdd from './SchoolAdd'
+import SchoolEdit from './SchoolEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'School',
+  components: {SchoolAdd, SchoolEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      schoolAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      schoolEdit: {
         visiable: false
       },
       queryParams: {},
@@ -124,67 +109,11 @@ export default {
     }),
     columns () {
       return [{
-        title: '公告类型',
-        dataIndex: 'bulletinType',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag>普通</a-tag>
-            case 1:
-              return <a-tag>答辩技巧</a-tag>
-            case 2:
-              return <a-tag>购买须知</a-tag>
-            default:
-              return '- -'
-          }
-        }
+        title: '学校名称',
+        dataIndex: 'name'
       }, {
-        title: '公告标题',
-        dataIndex: 'title'
-      }, {
-        title: '简介介绍',
-        dataIndex: 'synopsis'
-      }, {
-        title: '访问量',
-        dataIndex: 'accessNum',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '次'
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '状态',
-        dataIndex: 'status',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='pink'>待发布</a-tag>
-            case 1:
-              return <a-tag color='green'>已发布</a-tag>
-            case 2:
-              return <a-tag color='red'>下架</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '是否置顶',
-        dataIndex: 'pinTop',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='red'>否</a-tag>
-            case 1:
-              return <a-tag color='green'>是</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '发布时间',
-        dataIndex: 'createDate',
+        title: '学校地址',
+        dataIndex: 'address',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -193,8 +122,8 @@ export default {
           }
         }
       }, {
-        title: '创建人',
-        dataIndex: 'createBy',
+        title: '学校地区',
+        dataIndex: 'area',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -202,6 +131,69 @@ export default {
             return '- -'
           }
         }
+      }, {
+        title: '人数',
+        dataIndex: 'number',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '人'
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '备注',
+        dataIndex: 'desc',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '网址',
+        dataIndex: 'http',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '主管部门',
+        dataIndex: 'manage',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '层次',
+        dataIndex: 'level',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '类型',
+        dataIndex: 'type',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '所在城市',
+        dataIndex: 'city'
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -220,26 +212,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.schoolAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handleSchoolAddClose () {
+      this.schoolAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handleSchoolAddSuccess () {
+      this.schoolAdd.visiable = false
+      this.$message.success('新增学校成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.schoolEdit.setFormValues(record)
+      this.schoolEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handleSchoolEditClose () {
+      this.schoolEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handleSchoolEditSuccess () {
+      this.schoolEdit.visiable = false
+      this.$message.success('修改学校成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -257,7 +249,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bs-bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/sys-school/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -327,7 +319,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bs-bulletin-info/page', {
+      this.$get('/cos/sys-school/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

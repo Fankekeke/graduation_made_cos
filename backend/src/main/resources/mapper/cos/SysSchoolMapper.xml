@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fate.archer.cos.dao.SysSchoolMapper">
+
+    <sql id="baseResult">
+        sc.id,
+        sc.`name`,
+        sc.`address`,
+        sc.area,
+        sc.number,
+        sc.`desc`,
+        sc.http,
+        sc.manage,
+        sc.`level`,
+        sc.`type`,
+        sc.city_id AS cityId
+    </sql>
+
+    <sql id="baseParam">
+        <if test="sysSchool.city != null and sysSchool.city != ''">
+            AND city.`name` LIKE CONCAT('%',#{sysSchool.city},'%')
+        </if>
+        <if test="sysSchool.name != null and sysSchool.name != ''">
+            AND sc.`name` LIKE CONCAT('%',#{sysSchool.name},'%')
+        </if>
+    </sql>
+
+    <select id="getSchoolByPage" resultType="java.util.LinkedHashMap" parameterType="com.fate.archer.cos.entity.SysSchool">
+        SELECT
+        <include refid="baseResult"/>,
+        city.`name` AS city
+        FROM
+        sys_school sc
+        LEFT JOIN sys_city city ON (city.id = sc.city_id)
+        WHERE 1 = 1
+        <include refid="baseParam"/>
+    </select>
+
+    <select id="schoolUnited" resultType="java.util.LinkedHashMap">
+        SELECT
+        id,
+        `name`,
+        address,
+        area,
+        number,
+        `desc`,
+        http,
+        manage,
+        `level`,
+        type,
+        city_id
+        FROM
+        sys_school
+        WHERE
+        `name` LIKE CONCAT('%',#{key},'%')
+        LIMIT 5
+    </select>
+
+    <select id="getSchoolById" resultType="com.fate.archer.cos.entity.SysSchool">
+        SELECT <include refid="baseResult"/> FROM sys_school AS sc WHERE id = #{id}
+    </select>
+</mapper>
