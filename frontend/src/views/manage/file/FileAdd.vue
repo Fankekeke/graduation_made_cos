@@ -26,16 +26,20 @@
             ]"/>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item label='附件内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
+        <a-col :span="12">
+          <a-form-item label='附件状态' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'status',
+              { rules: [{ required: true, message: '请选择状态!' }] }
+              ]">
+              <a-select-option value='0'>待发布</a-select-option>
+              <a-select-option value='1'>已发布</a-select-option>
+              <a-select-option value='2'>下架</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='图册' v-bind="formItemLayout">
+          <a-form-item label='附件上传' v-bind="formItemLayout">
             <a-upload
               name="avatar"
               action="http://127.0.0.1:9527/file/fileUpload/"
@@ -44,7 +48,7 @@
               @preview="handlePreview"
               @change="picHandleChange"
             >
-              <div v-if="fileList.length < 8">
+              <div v-if="fileList.length < 2">
                 <a-icon type="plus" />
                 <div class="ant-upload-text">
                   Upload
@@ -127,13 +131,13 @@ export default {
       this.$emit('close')
     },
     handleSubmit () {
-      // 获取图片List
+      // 获取附件List
       let images = []
       this.fileList.forEach(image => {
         images.push(image.response)
       })
       this.form.validateFields((err, values) => {
-        values.images = images.length > 0 ? images.join(',') : null
+        values.fileId = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
           this.$post('/cos/bs-attachment-info', {
