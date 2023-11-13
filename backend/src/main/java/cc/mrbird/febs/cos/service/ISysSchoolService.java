@@ -1,9 +1,9 @@
 package cc.mrbird.febs.cos.service;
 
+import cc.mrbird.febs.cos.entity.SysSchool;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fate.archer.cos.entity.SysSchool;
 
 import java.util.LinkedHashMap;
 import java.util.List;

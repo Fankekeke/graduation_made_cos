@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fate.archer.cos.dao.SysSchoolMapper">
+<mapper namespace="cc.mrbird.febs.cos.dao.SysSchoolMapper">
 
     <sql id="baseResult">
         sc.id,
@@ -25,7 +25,7 @@
         </if>
     </sql>
 
-    <select id="getSchoolByPage" resultType="java.util.LinkedHashMap" parameterType="com.fate.archer.cos.entity.SysSchool">
+    <select id="getSchoolByPage" resultType="java.util.LinkedHashMap" parameterType="cc.mrbird.febs.cos.entity.SysSchool">
         SELECT
         <include refid="baseResult"/>,
         city.`name` AS city
@@ -56,7 +56,7 @@
         LIMIT 5
     </select>
 
-    <select id="getSchoolById" resultType="com.fate.archer.cos.entity.SysSchool">
+    <select id="getSchoolById" resultType="cc.mrbird.febs.cos.entity.SysSchool">
         SELECT <include refid="baseResult"/> FROM sys_school AS sc WHERE id = #{id}
     </select>
 </mapper>

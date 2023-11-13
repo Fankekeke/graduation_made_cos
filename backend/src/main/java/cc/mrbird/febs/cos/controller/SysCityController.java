@@ -1,12 +1,12 @@
 package cc.mrbird.febs.cos.controller;
 
 
+import cc.mrbird.febs.common.annotation.Log;
+import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.SysCity;
+import cc.mrbird.febs.cos.service.ISysCityService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fate.archer.common.annotation.Log;
-import com.fate.archer.common.utils.R;
-import com.fate.archer.cos.entity.SysCity;
-import com.fate.archer.cos.service.ISysCityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,6 @@ public class SysCityController {
      * @param sysCity 城市信息
      * @return 城市信息列表
      */
-    @Log("查询城市信息")
     @GetMapping("/page")
     public R page(Page page, SysCity sysCity) {
         return R.ok(sysCityService.getCityByPage(page, sysCity));

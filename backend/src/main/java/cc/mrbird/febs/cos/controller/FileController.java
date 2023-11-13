@@ -39,4 +39,56 @@ public class FileController {
         return warning;
     }
 
+    /**
+     * 上传项目文件
+     *
+     * @param file 项目文件
+     * @return 压缩包名称
+     */
+    @ResponseBody
+    @RequestMapping("/fileUploadByZip")
+    public String uploadByZip(@RequestParam("zip") MultipartFile file) {
+        // 1定义要上传文件 的存放路径
+        String localPath = "G:/线上毕设环境/file";
+        // 2获得文件名字
+        String fileName = file.getOriginalFilename();
+        // 2上传失败提示
+        String warning = "";
+        String newFileName = FileUtil.uploadByZip(file, localPath, fileName);
+        if (newFileName != null) {
+            //上传成功
+            warning = newFileName;
+
+        } else {
+            warning = "上传失败";
+        }
+        return warning;
+    }
+
+    /**
+     * 上传项目附件文件
+     *
+     * @param file 附件文件
+     * @return 附件名称
+     */
+    @ResponseBody
+    @RequestMapping("/fileUploadByAnnex")
+    public String uploadByAnnex(@RequestParam("annex") MultipartFile file) {
+        // 1定义要上传文件 的存放路径
+        String localPath = "G:/线上毕设环境/annex";
+        // 2获得文件名字
+        String fileName = file.getOriginalFilename();
+        // 2上传失败提示
+        String warning = "";
+        String newFileName = FileUtil.uploadByAnnex(file, localPath, fileName);
+        if (newFileName != null) {
+            //上传成功
+            warning = newFileName;
+
+        } else {
+            warning = "上传失败";
+        }
+        return warning;
+    }
+
 }
