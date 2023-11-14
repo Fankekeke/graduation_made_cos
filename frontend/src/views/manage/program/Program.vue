@@ -7,7 +7,15 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="公告标题"
+                label="项目编号"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.code"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="项目名称"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-input v-model="queryParams.title"/>
@@ -15,25 +23,21 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="状态"
+                label="作者"
+                :labelCol="{span: 4}"
+                :wrapperCol="{span: 18, offset: 2}">
+                <a-input v-model="queryParams.author"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="项目状态"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
                 <a-select v-model="queryParams.status">
                   <a-select-option value='0'>待发布</a-select-option>
                   <a-select-option value='1'>已发布</a-select-option>
                   <a-select-option value='2'>下架</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="公告类型"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
-                <a-select v-model="queryParams.bulletinType">
-                  <a-select-option value='0'>普通</a-select-option>
-                  <a-select-option value='1'>答辩技巧</a-select-option>
-                  <a-select-option value='2'>购买须知</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -65,39 +69,39 @@
         </template>
       </a-table>
     </div>
-    <bulletin-add
-      v-if="bulletinAdd.visiable"
-      @close="handleBulletinAddClose"
-      @success="handleBulletinAddSuccess"
-      :bulletinAddVisiable="bulletinAdd.visiable">
-    </bulletin-add>
-    <bulletin-edit
-      ref="bulletinEdit"
-      @close="handleBulletinEditClose"
-      @success="handleBulletinEditSuccess"
-      :bulletinEditVisiable="bulletinEdit.visiable">
-    </bulletin-edit>
+    <program-add
+      v-if="programAdd.visiable"
+      @close="handleprogramAddClose"
+      @success="handleprogramAddSuccess"
+      :programAddVisiable="programAdd.visiable">
+    </program-add>
+    <program-edit
+      ref="programEdit"
+      @close="handleprogramEditClose"
+      @success="handleprogramEditSuccess"
+      :programEditVisiable="programEdit.visiable">
+    </program-edit>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import BulletinAdd from './ProgramAdd.vue'
-import BulletinEdit from './ProgramEdit.vue'
+import programAdd from './ProgramAdd.vue'
+import programEdit from './ProgramEdit.vue'
 import {mapState} from 'vuex'
 import moment from 'moment'
 moment.locale('zh-cn')
 
 export default {
-  name: 'Bulletin',
-  components: {BulletinAdd, BulletinEdit, RangeDate},
+  name: 'program',
+  components: {programAdd, programEdit, RangeDate},
   data () {
     return {
       advanced: false,
-      bulletinAdd: {
+      programAdd: {
         visiable: false
       },
-      bulletinEdit: {
+      programEdit: {
         visiable: false
       },
       queryParams: {},
@@ -124,32 +128,37 @@ export default {
     }),
     columns () {
       return [{
-        title: '公告类型',
-        dataIndex: 'bulletinType',
+        title: '项目编号',
+        dataIndex: 'title'
+      }, {
+        title: '项目标题',
+        dataIndex: 'title'
+      }, {
+        title: '项目介绍',
+        dataIndex: 'synopsis',
         customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag>普通</a-tag>
-            case 1:
-              return <a-tag>答辩技巧</a-tag>
-            case 2:
-              return <a-tag>购买须知</a-tag>
-            default:
-              return '- -'
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
           }
         }
       }, {
-        title: '公告标题',
-        dataIndex: 'title'
-      }, {
-        title: '简介介绍',
-        dataIndex: 'synopsis'
-      }, {
-        title: '访问量',
-        dataIndex: 'accessNum',
+        title: '附带内容',
+        dataIndex: 'attachment',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '次'
+            return text
+          } else {
+            return '- -'
+          }
+        }
+      }, {
+        title: '价格',
+        dataIndex: 'unitPrice',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text + '元'
           } else {
             return '- -'
           }
@@ -170,19 +179,6 @@ export default {
           }
         }
       }, {
-        title: '是否置顶',
-        dataIndex: 'pinTop',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case 0:
-              return <a-tag color='red'>否</a-tag>
-            case 1:
-              return <a-tag color='green'>是</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
         title: '发布时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
@@ -193,8 +189,8 @@ export default {
           }
         }
       }, {
-        title: '创建人',
-        dataIndex: 'createBy',
+        title: '作者',
+        dataIndex: 'author',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -220,26 +216,26 @@ export default {
       this.advanced = !this.advanced
     },
     add () {
-      this.bulletinAdd.visiable = true
+      this.programAdd.visiable = true
     },
-    handleBulletinAddClose () {
-      this.bulletinAdd.visiable = false
+    handleprogramAddClose () {
+      this.programAdd.visiable = false
     },
-    handleBulletinAddSuccess () {
-      this.bulletinAdd.visiable = false
-      this.$message.success('新增公告成功')
+    handleprogramAddSuccess () {
+      this.programAdd.visiable = false
+      this.$message.success('新增项目成功')
       this.search()
     },
     edit (record) {
-      this.$refs.bulletinEdit.setFormValues(record)
-      this.bulletinEdit.visiable = true
+      this.$refs.programEdit.setFormValues(record)
+      this.programEdit.visiable = true
     },
-    handleBulletinEditClose () {
-      this.bulletinEdit.visiable = false
+    handleprogramEditClose () {
+      this.programEdit.visiable = false
     },
-    handleBulletinEditSuccess () {
-      this.bulletinEdit.visiable = false
-      this.$message.success('修改公告成功')
+    handleprogramEditSuccess () {
+      this.programEdit.visiable = false
+      this.$message.success('修改项目成功')
       this.search()
     },
     handleDeptChange (value) {
@@ -257,7 +253,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/bs-bulletin-info/' + ids).then(() => {
+          that.$delete('/cos/bs-program-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -327,7 +323,7 @@ export default {
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
       }
-      this.$get('/cos/bs-bulletin-info/page', {
+      this.$get('/cos/bs-program-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data
