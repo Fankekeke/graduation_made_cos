@@ -1,11 +1,11 @@
 package cc.mrbird.febs.cos.controller;
 
 
+import cc.mrbird.febs.common.annotation.Log;
+import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.SysSchool;
+import cc.mrbird.febs.cos.service.ISysSchoolService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fate.archer.common.annotation.Log;
-import com.fate.archer.common.utils.R;
-import com.fate.archer.cos.entity.SysSchool;
-import com.fate.archer.cos.service.ISysSchoolService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,6 @@ public class SysSchoolController {
      * @param sysSchool 学校信息
      * @return 学校列表
      */
-    @Log("查询学校信息")
     @GetMapping("/page")
     public R page(Page page, SysSchool sysSchool) {
         return R.ok(sysSchoolService.getSchoolByPage(page, sysSchool));

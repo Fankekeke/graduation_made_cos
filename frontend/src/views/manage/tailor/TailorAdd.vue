@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增附件" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增公告" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -11,44 +11,40 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='附件标题' v-bind="formItemLayout">
+          <a-form-item label='公告标题' v-bind="formItemLayout">
             <a-input v-decorator="[
             'title',
-            { rules: [{ required: true, message: '请输入附件标题!' }] }
+            { rules: [{ required: true, message: '请输入名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='作者' v-bind="formItemLayout">
+          <a-form-item label='上传人' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'author',
-            { rules: [{ required: true, message: '请输入作者!' }] }
+            'publisher',
+            { rules: [{ required: true, message: '请输入上传人!' }] }
             ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label='附件状态' v-bind="formItemLayout">
-            <a-select v-decorator="[
-              'status',
-              { rules: [{ required: true, message: '请选择状态!' }] }
-              ]">
-              <a-select-option value='0'>待发布</a-select-option>
-              <a-select-option value='1'>已发布</a-select-option>
-              <a-select-option value='2'>下架</a-select-option>
-            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='附件上传' v-bind="formItemLayout">
+          <a-form-item label='公告内容' v-bind="formItemLayout">
+            <a-textarea :rows="6" v-decorator="[
+            'content',
+             { rules: [{ required: true, message: '请输入名称!' }] }
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='图册' v-bind="formItemLayout">
             <a-upload
               name="avatar"
-              action="http://127.0.0.1:9527/file/fileUploadByAnnex/"
+              action="http://127.0.0.1:9527/file/fileUpload/"
               list-type="picture-card"
               :file-list="fileList"
               @preview="handlePreview"
               @change="picHandleChange"
             >
-              <div v-if="fileList.length < 2">
+              <div v-if="fileList.length < 8">
                 <a-icon type="plus" />
                 <div class="ant-upload-text">
                   Upload
@@ -80,9 +76,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'fileAdd',
+  name: 'BulletinAdd',
   props: {
-    fileAddVisiable: {
+    bulletinAddVisiable: {
       default: false
     }
   },
@@ -92,7 +88,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.fileAddVisiable
+        return this.bulletinAddVisiable
       },
       set: function () {
       }
@@ -131,16 +127,16 @@ export default {
       this.$emit('close')
     },
     handleSubmit () {
-      // 获取附件List
+      // 获取图片List
       let images = []
       this.fileList.forEach(image => {
         images.push(image.response)
       })
       this.form.validateFields((err, values) => {
-        values.fileId = images.length > 0 ? images.join(',') : null
+        values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$post('/cos/bs-attachment-info', {
+          this.$post('/cos/bulletin-info', {
             ...values
           }).then((r) => {
             this.reset()

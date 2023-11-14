@@ -14,37 +14,41 @@
           <a-form-item label='附件标题' v-bind="formItemLayout">
             <a-input v-decorator="[
             'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
+            { rules: [{ required: true, message: '请输入附件标题!' }] }
             ]"/>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label='上传人' v-bind="formItemLayout">
+          <a-form-item label='作者' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'publisher',
-            { rules: [{ required: true, message: '请输入上传人!' }] }
+            'author',
+            { rules: [{ required: true, message: '请输入作者!' }] }
             ]"/>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item label='附件内容' v-bind="formItemLayout">
-            <a-textarea :rows="6" v-decorator="[
-            'content',
-             { rules: [{ required: true, message: '请输入名称!' }] }
-            ]"/>
+        <a-col :span="12">
+          <a-form-item label='附件状态' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'status',
+              { rules: [{ required: true, message: '请选择状态!' }] }
+              ]">
+              <a-select-option value='0'>待发布</a-select-option>
+              <a-select-option value='1'>已发布</a-select-option>
+              <a-select-option value='2'>下架</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='图册' v-bind="formItemLayout">
+          <a-form-item label='附件上传' v-bind="formItemLayout">
             <a-upload
               name="avatar"
-              action="http://127.0.0.1:9527/file/fileUpload/"
+              action="http://127.0.0.1:9527/file/fileUploadByAnnex/"
               list-type="picture-card"
               :file-list="fileList"
               @preview="handlePreview"
               @change="picHandleChange"
             >
-              <div v-if="fileList.length < 8">
+              <div v-if="fileList.length < 2">
                 <a-icon type="plus" />
                 <div class="ant-upload-text">
                   Upload

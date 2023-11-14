@@ -1,11 +1,11 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.cos.dao.SysSchoolMapper;
+import cc.mrbird.febs.cos.entity.SysSchool;
+import cc.mrbird.febs.cos.service.ISysSchoolService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fate.archer.cos.dao.SysSchoolMapper;
-import com.fate.archer.cos.entity.SysSchool;
-import com.fate.archer.cos.service.ISysSchoolService;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
