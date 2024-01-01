@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="新增公告" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="新增项目" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -11,10 +11,10 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='公告标题' v-bind="formItemLayout">
+          <a-form-item label='项目名称' v-bind="formItemLayout">
             <a-input v-decorator="[
             'title',
-            { rules: [{ required: true, message: '请输入名称!' }] }
+            { rules: [{ required: true, message: '请输入项目名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
@@ -27,7 +27,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label='公告内容' v-bind="formItemLayout">
+          <a-form-item label='项目内容' v-bind="formItemLayout">
             <a-textarea :rows="6" v-decorator="[
             'content',
              { rules: [{ required: true, message: '请输入名称!' }] }
@@ -44,7 +44,7 @@
               @preview="handlePreview"
               @change="picHandleChange"
             >
-              <div v-if="fileList.length < 8">
+              <div v-if="fileList.length < 20">
                 <a-icon type="plus" />
                 <div class="ant-upload-text">
                   Upload
@@ -76,9 +76,9 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinAdd',
+  name: 'programAdd',
   props: {
-    bulletinAddVisiable: {
+    programAddVisiable: {
       default: false
     }
   },
@@ -88,7 +88,7 @@ export default {
     }),
     show: {
       get: function () {
-        return this.bulletinAddVisiable
+        return this.programAddVisiable
       },
       set: function () {
       }
@@ -136,7 +136,7 @@ export default {
         values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$post('/cos/bulletin-info', {
+          this.$post('/cos/program-info', {
             ...values
           }).then((r) => {
             this.reset()
