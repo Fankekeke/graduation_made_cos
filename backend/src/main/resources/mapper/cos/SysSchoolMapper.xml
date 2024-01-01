@@ -30,8 +30,8 @@
         <include refid="baseResult"/>,
         city.`name` AS city
         FROM
-        sys_school sc
-        LEFT JOIN sys_city city ON (city.id = sc.city_id)
+        bs_school_info sc
+        LEFT JOIN bs_city_info city ON (city.id = sc.city_id)
         WHERE 1 = 1
         <include refid="baseParam"/>
     </select>
@@ -50,13 +50,13 @@
         type,
         city_id
         FROM
-        sys_school
+        bs_school_info
         WHERE
         `name` LIKE CONCAT('%',#{key},'%')
         LIMIT 5
     </select>
 
     <select id="getSchoolById" resultType="cc.mrbird.febs.cos.entity.SysSchool">
-        SELECT <include refid="baseResult"/> FROM sys_school AS sc WHERE id = #{id}
+        SELECT <include refid="baseResult"/> FROM bs_school_info AS sc WHERE id = #{id}
     </select>
 </mapper>

@@ -31,8 +31,8 @@
         <include refid="baseResult"/>,
         city_b.`name` AS parent
         FROM
-        sys_city city_a
-        LEFT JOIN sys_city city_b ON (city_a.parent_id = city_b.id)
+        bs_city_info city_a
+        LEFT JOIN bs_city_info city_b ON (city_a.parent_id = city_b.id)
         WHERE 1 = 1
         <include refid="baseParam"/>
     </select>
