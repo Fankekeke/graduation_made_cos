@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author FanK
@@ -29,4 +30,20 @@ public interface IBsVisitRecordService extends IService<BsVisitRecord> {
      * @return 结果
      */
     boolean addVisitRecord(BsVisitRecord visitRecord);
+
+    /**
+     * 根据时间统计访问记录
+     *
+     * @param date 日期
+     * @param type 类型
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryVisitRecordByDate(String date, String type);
+
+    /**
+     * 获取近10天项目访问记录
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryVisitRecordDateRange();
 }
