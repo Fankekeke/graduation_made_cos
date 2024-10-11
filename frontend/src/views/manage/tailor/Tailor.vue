@@ -8,16 +8,16 @@
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="公告标题"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.title"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="状态"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-select v-model="queryParams.status">
                   <a-select-option value='0'>待发布</a-select-option>
                   <a-select-option value='1'>已发布</a-select-option>
@@ -28,8 +28,8 @@
             <a-col :md="6" :sm="24">
               <a-form-item
                 label="公告类型"
-                :labelCol="{span: 4}"
-                :wrapperCol="{span: 18, offset: 2}">
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
                 <a-select v-model="queryParams.bulletinType">
                   <a-select-option value='0'>普通</a-select-option>
                   <a-select-option value='1'>答辩技巧</a-select-option>
